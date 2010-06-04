@@ -20,5 +20,5 @@ tmpl.pi = 3.14
 is( tmpl 'str', 'some text', "eval 'str'" )
 is( tmpl 'pi', '3.14', "eval 'pi'" )
 isnt( tmpl 'pi', 3.14 )
-error_like(function () tmpl 'unk' end, "unknown: unk", "error when eval 'unk'" )
+is( tmpl 'unk', '', "unknown gives an empty string" )
 

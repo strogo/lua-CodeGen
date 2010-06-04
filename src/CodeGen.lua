@@ -3,18 +3,31 @@
 -- lua-CodeGen : <http://lua-codegen.luaforge.net/>
 --
 
-local error = error
 local setmetatable = setmetatable
 local tostring = tostring
+local type = type
+local table = require 'table'
 
 module 'CodeGen'
 
-local function eval (self, patt)
-    local val = self[patt]
+local function eval (self, key, sep)
+    local val = self[key]
     if val == nil then
-        return error("unknown: " .. patt)
+        return ''
     end
-    return tostring(val)
+    local t = type(val)
+    if t == 'table' then
+        return table.concat(val, sep)
+    elseif t == 'string' then
+        local function interp (capt)
+            local k = capt:sub(2, capt:len() - 1)
+            return self[k]
+        end
+        val = val:gsub("%$(%b{})", interp)
+        return val
+    else
+        return tostring(val)
+    end
 end
 
 local function new (class, obj)
