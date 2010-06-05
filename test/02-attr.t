@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(4)
+plan(5)
 
 tmpl = CodeGen{
     code = [[print("${hello}, ${guy}");]],
@@ -17,6 +17,10 @@ is( tmpl 'code', [[print("Hi, you");]] )
 
 tmpl = CodeGen()
 tmpl.a = { 'abc', 'def', 'hij' }
-is( tmpl 'a', 'abcdefhij', "eval array" )
-is( tmpl('a', ';'), 'abc;def;hij', "with sep" )
+tmpl.code = [[print(${a})]]
+is( tmpl 'code', [[print(abcdefhij)]], "array" )
+tmpl.code = [[print(${a; separator=', '})]]
+is( tmpl 'code', [[print(abc, def, hij)]], "array with sep" )
+tmpl.code = [[print(${a; separator = ", " })]]
+is( tmpl 'code', [[print(abc, def, hij)]], "array with sep" )
 

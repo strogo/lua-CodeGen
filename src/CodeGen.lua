@@ -10,23 +10,45 @@ local table = require 'table'
 
 module 'CodeGen'
 
-local function eval (self, key, sep)
+local function attr (self, key, sep)
     local val = self[key]
     if val == nil then
         return ''
     end
-    local t = type(val)
-    if t == 'table' then
+    if type(val) == 'table' then
         return table.concat(val, sep)
-    elseif t == 'string' then
-        local function interp (capt)
-            local k = capt:sub(2, capt:len() - 1)
-            return self[k]
-        end
-        val = val:gsub("%$(%b{})", interp)
-        return val
     else
         return tostring(val)
+    end
+end
+
+local function eval (self, key)
+    local function get_value (capt)
+        local item = capt:match "{(%w+)}"
+        if item then
+            return attr(self, item)
+        end
+        local item = capt:match "{(%w+)%(%)}"
+        if item then
+            return eval(self, item)
+        end
+        local item, sep = capt:match "{(%w+);%s+separator%s*=%s*'([^']+)'%s*}"
+        if item then
+            return attr(self, item, sep)
+        end
+        local item, sep = capt:match "{(%w+);%s+separator%s*=%s*\"([^\"]+)\"%s*}"
+        if item then
+            return attr(self, item, sep)
+        end
+        return capt
+    end  -- get_value
+
+    local val = self[key]
+    if type(val) == 'string' then
+        local str, nb = val:gsub("%$(%b{})", get_value)
+        return str
+    else
+        return attr(self, key)
     end
 end
 
