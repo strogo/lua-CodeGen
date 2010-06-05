@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(3)
+plan(7)
 
 tmpl = CodeGen{
     outer = [[
@@ -30,6 +30,24 @@ begin
 print("key1 = 1");print("key2 = 2");print("key3 = 3");
 end
 ]] , "with array" )
+
+tmpl.inner = 3.14
+res, msg = tmpl 'outer'
+is( res, [[
+begin
+${data:inner()}
+end
+]] , "not a template" )
+is( msg, "inner is not a template" )
+
+tmpl.data = 3.14
+res, msg = tmpl 'outer'
+is( res, [[
+begin
+${data:inner()}
+end
+]] , "not a table" )
+is( msg, "data is not a table" )
 
 tmpl = CodeGen{
     outer = [[

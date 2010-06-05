@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(1)
+plan(3)
 
 tmpl = CodeGen{
     outer = [[
@@ -21,3 +21,11 @@ begin
 end
 ]] , "" )
 
+tmpl.inner = 3.14
+res, msg = tmpl 'outer'
+is( res, [[
+begin
+    ${inner()}
+end
+]] , "not a template" )
+is( msg, "inner is not a template" )
