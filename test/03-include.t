@@ -28,4 +28,4 @@ begin
     ${inner()}
 end
 ]] , "not a template" )
-is( msg, "inner is not a template" )
+is( msg, "outer:2: inner is not a template" )
