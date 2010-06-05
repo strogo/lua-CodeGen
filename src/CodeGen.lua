@@ -37,8 +37,17 @@ local function eval (self, key)
         end
     end
 
-    local function get_value (k)
-        return self[k]
+    local function get_value (name)
+        local i = 1
+        local t = self
+        for w in name:gmatch "(%w+)%." do
+            i = i + w:len() + 1
+            t = t[w]
+            if type(t) ~= 'table' then
+                return nil
+            end
+        end
+        return t[name:sub(i)]
     end
 
     local function interpolate (template)
@@ -47,11 +56,11 @@ local function eval (self, key)
         end
 
         local function get_repl (capt)
-            local item = capt:match "%${(%w+)}"
+            local item = capt:match "%${([%w%.]+)}"
             if item then
                 return render(get_value(item))
             end
-            local tmpl = capt:match "%${(%w+)%(%)}"
+            local tmpl = capt:match "%${([%w%.]+)%(%)}"
             if tmpl then
                 local result = interpolate(get_value(tmpl))
                 if result == nil then
@@ -60,7 +69,7 @@ local function eval (self, key)
                 end
                 return result
             end
-            local item, tmpl = capt:match "%${(%w+):(%w+)%(%)}"
+            local item, tmpl = capt:match "%${([%w%.]+):([%w%.]+)%(%)}"
             if item and tmpl then
                 local array = get_value(item)
                 if array == nil then
@@ -88,11 +97,11 @@ local function eval (self, key)
                 end
                 return table.concat(results)
             end
-            local item, sep = capt:match "%${(%w+);%s+separator%s*=%s*'([^']+)'%s*}"
+            local item, sep = capt:match "%${([%w%.]+);%s+separator%s*=%s*'([^']+)'%s*}"
             if item and sep then
                 return render(get_value(item), sep)
             end
-            local item, sep = capt:match "%${(%w+);%s+separator%s*=%s*\"([^\"]+)\"%s*}"
+            local item, sep = capt:match "%${([%w%.]+);%s+separator%s*=%s*\"([^\"]+)\"%s*}"
             if item then
                 return render(get_value(item), sep)
             end
