@@ -1,0 +1,27 @@
+package = 'lua-CodeGen'
+version = '@version@-@rev@'
+source = {
+    url = 'http://cloud.github.com/downloads/fperrad/lua-CodeGen/lua-codegen-@version@.tar.gz',
+    md5 = '@md5@',
+    dir = 'lua-CodeGen-@version@',
+}
+description = {
+    summary = "a template engine",
+    detailed = [[
+        lua-CodeGen is a "safe" template engine.
+    ]],
+    homepage = 'http://lua-codegen.luaforge.net/',
+    maintainer = 'Francois Perrad',
+    license = 'MIT/X11'
+}
+dependencies = {
+    'lua >= 5.1',
+    'lua-testmore >= 0.2.1',
+}
+build = {
+    type = 'builtin',
+    modules = {
+        ['CodeGen'] = 'src/CodeGen.lua',
+    },
+    copy_directories = { 'doc', 'test' },
+}
