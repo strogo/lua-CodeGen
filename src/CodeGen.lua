@@ -61,27 +61,30 @@ local function eval (self, name)
 
         local function interpolate_line (line)
             local function get_repl (capt)
-                local item = capt:match "%${([%w%.]+)}"
-                if item then
-                    return render(get_value(item))
+                local capt1, pos = capt:match("^%${([%a_][%w%._]*)()", 1)
+                if not capt1 then
+                    add_message(capt, " does not match")
+                    return capt
                 end
-                local tmpl = capt:match "%${([%w%.]+)%(%)}"
-                if tmpl then
-                    local result = interpolate(get_value(tmpl), tmpl)
+                if capt:match("^}", pos) then
+                    return render(get_value(capt1))
+                end
+                if capt:match("^%(%)}", pos) then
+                    local result = interpolate(self[capt1], capt1)
                     if result == nil then
-                        add_message(tostring(tmpl), " is not a template")
+                        add_message(capt1, " is not a template")
                         return capt
                     end
                     return result
                 end
-                local item, tmpl = capt:match "%${([%w%.]+):([%w%.]+)%(%)}"
-                if item and tmpl then
-                    local array = get_value(item)
+                local capt2 = capt:match("^:([%a_][%w_]*)%(%)}", pos)
+                if capt2 then
+                    local array = get_value(capt1)
                     if array == nil then
                         return ''
                     end
                     if type(array) ~= 'table' then
-                        add_message(item, " is not a table")
+                        add_message(capt1, " is not a table")
                         return capt
                     end
                     local parents = getmetatable(self)._PARENTS
@@ -92,9 +95,9 @@ local function eval (self, name)
                             elt = { it = elt }
                         end
                         table.insert(parents, elt)
-                        local result = interpolate(get_value(tmpl), tmpl)
+                        local result = interpolate(self[capt2], capt2)
                         if result == nil then
-                            add_message(tostring(tmpl), " is not a template")
+                            add_message(tostring(capt2), " is not a template")
                             return capt
                         end
                         table.insert(results, result)
@@ -102,15 +105,15 @@ local function eval (self, name)
                     end
                     return table.concat(results)
                 end
-                local item, sep = capt:match "%${([%w%.]+);%s+separator%s*=%s*'([^']+)'%s*}"
-                if item and sep then
-                    return render(get_value(item), sep)
+                local sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*}", pos)
+                if sep then
+                    return render(get_value(capt1), sep)
                 end
-                local item, sep = capt:match "%${([%w%.]+);%s+separator%s*=%s*\"([^\"]+)\"%s*}"
-                if item then
-                    return render(get_value(item), sep)
+                local sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*}", pos)
+                if sep then
+                    return render(get_value(capt1), sep)
                 end
-                add_message(capt, " no match")
+                add_message(capt, " does not match")
                 return capt
             end  -- get_repl
 

@@ -4,12 +4,12 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(9)
+plan(13)
 
 tmpl = CodeGen{
-    code = [[print("${hello}, ${guy}");]],
+    code = [[print("${hello}, ${_guy1}");]],
     hello = "Hello",
-    guy = "you",
+    _guy1 = "you",
 }
 is( tmpl 'code', [[print("Hello, you");]], "scalar attributes" )
 tmpl.hello = "Hi"
@@ -41,3 +41,14 @@ tmpl.code = [[print("${hello}, ${people.guy}");]]
 res, msg = tmpl 'code'
 is( res, [[print(", ");]], "missing attr" )
 is( msg, "code:1: people.guy is invalid" )
+
+tmpl.code = [[print("${hello-people}");]]
+res, msg = tmpl 'code'
+is( res, [[print("${hello-people}");]], "no match" )
+is( msg, "code:1: ${hello-people} does not match" )
+
+tmpl.code = [[print("${ hello }");]]
+res, msg = tmpl 'code'
+is( res, [[print("${ hello }");]], "no match" )
+is( msg, "code:1: ${ hello } does not match" )
+
