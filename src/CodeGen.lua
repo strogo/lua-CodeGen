@@ -61,6 +61,15 @@ local function eval (self, name)
 
         local function interpolate_line (line)
             local function get_repl (capt)
+                local function apply (tmpl)
+                    local result = interpolate(self[tmpl], tmpl)
+                    if result == nil then
+                        add_message(tmpl, " is not a template")
+                        return capt
+                    end
+                    return result
+                end  -- apply
+
                 local capt1, pos = capt:match("^%${([%a_][%w%._]*)()", 1)
                 if not capt1 then
                     add_message(capt, " does not match")
@@ -70,12 +79,7 @@ local function eval (self, name)
                     return render(get_value(capt1))
                 end
                 if capt:match("^%(%)}", pos) then
-                    local result = interpolate(self[capt1], capt1)
-                    if result == nil then
-                        add_message(capt1, " is not a template")
-                        return capt
-                    end
-                    return result
+                    return apply(capt1)
                 end
                 local capt2 = capt:match("^:([%a_][%w_]*)%(%)}", pos)
                 if capt2 then
@@ -95,15 +99,30 @@ local function eval (self, name)
                             elt = { it = elt }
                         end
                         table.insert(parents, elt)
-                        local result = interpolate(self[capt2], capt2)
-                        if result == nil then
-                            add_message(tostring(capt2), " is not a template")
-                            return capt
-                        end
+                        local result = apply(capt2)
                         table.insert(results, result)
                         table.remove(parents)
+                        if result == capt then
+                            break
+                        end
                     end
                     return table.concat(results)
+                end
+                local capt2 = capt:match("^?([%a_][%w_]*)%(%)}", pos)
+                if capt2 then
+                    if get_value(capt1) then
+                        return apply(capt2)
+                    else
+                        return ''
+                    end
+                end
+                local capt2, capt3 = capt:match("^?([%a_][%w_]*)%(%):([%a_][%w_]*)%(%)}", pos)
+                if capt2 and capt3 then
+                    if get_value(capt1) then
+                        return apply(capt2)
+                    else
+                        return apply(capt3)
+                    end
                 end
                 local sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*}", pos)
                 if sep then
