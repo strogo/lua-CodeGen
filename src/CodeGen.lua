@@ -136,7 +136,15 @@ local function eval (self, name)
                 return capt
             end  -- get_repl
 
-            local result, nb = line:gsub("(%$%b{})", get_repl)
+            local indent = line:match "^(%s+)%$%b{}$"
+            local result = line:gsub("(%$%b{})", get_repl)
+            if indent then
+                local len = result:len()
+                if result:sub(len) == "\n" then
+                    result = result:sub(1, len -1)
+                end
+                result = result:gsub("\n", "\n" .. indent)
+            end
             return result
         end -- interpolate_line
 

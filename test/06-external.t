@@ -14,6 +14,8 @@ tmpl.data = {
 }
 is( tmpl 'top', [[
 begin
-print("key1 = 1");print("key2 = 2");print("key3 = 3");
+        print("key1 = 1");
+        print("key2 = 2");
+        print("key3 = 3");
 end
 ]] , "external" )

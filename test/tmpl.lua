@@ -1,8 +1,10 @@
 return CodeGen{
     top = [[
 begin
-${data:inner()}
+    ${data:inner()}
 end
 ]],
-    inner = [[print("${name()} = ${value}");]],
+    inner = [[
+    print("${name()} = ${value}");
+]],
 }
