@@ -34,19 +34,6 @@ local function eval (self, name)
         end
     end  -- get_messages
 
-    local function get_value (vname)
-        local i = 1
-        local t = self
-        for w in vname:gmatch "(%w+)%." do
-            i = i + w:len() + 1
-            t = t[w]
-            if type(t) ~= 'table' then
-                return nil
-            end
-        end
-        return t[vname:sub(i)]
-    end  -- get_value
-
     local function interpolate (template, tname)
         if type(template) ~= 'string' then
             return nil
@@ -57,6 +44,20 @@ local function eval (self, name)
             local msg = table.concat({...})
             table.insert(getmetatable(self)._MSG, tname .. ':' .. lineno .. ': ' .. msg)
         end  -- add_message
+
+        local function get_value (vname)
+            local i = 1
+            local t = self
+            for w in vname:gmatch "(%w+)%." do
+                i = i + w:len() + 1
+                t = t[w]
+                if type(t) ~= 'table' then
+                    add_message(vname, " is invalid")
+                    return nil
+                end
+            end
+            return t[vname:sub(i)]
+        end  -- get_value
 
         local function interpolate_line (line)
             local function get_repl (capt)

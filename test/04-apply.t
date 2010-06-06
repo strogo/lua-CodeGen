@@ -12,7 +12,7 @@ begin
 ${data:inner()}
 end
 ]],
-    inner = [[print("${name} = ${value}");]],
+    inner = [[print("${name()} = ${value}");]],
 }
 is( tmpl 'outer', [[
 begin

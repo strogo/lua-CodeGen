@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(8)
+plan(9)
 
 tmpl = CodeGen{
     code = [[print("${hello}, ${guy}");]],
@@ -38,4 +38,6 @@ tmpl.data.hello = "Hi"
 is( tmpl 'code', [[print("Hi, you");]] )
 
 tmpl.code = [[print("${hello}, ${people.guy}");]]
-is( tmpl 'code', [[print(", ");]], "missing attr" )
+res, msg = tmpl 'code'
+is( res, [[print(", ");]], "missing attr" )
+is( msg, "code:1: people.guy is invalid" )
