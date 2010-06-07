@@ -91,17 +91,16 @@ local function eval (self, name)
                         add_message(capt1, " is not a table")
                         return capt
                     end
-                    local parents = getmetatable(self)._PARENTS
                     local results = {}
                     for i = 1, #array do
                         local elt = array[i]
                         if type(elt) ~= 'table' then
                             elt = { it = elt }
                         end
-                        table.insert(parents, elt)
+                        table.insert(self, elt)
                         local result = apply(capt2)
                         table.insert(results, result)
-                        table.remove(parents)
+                        table.remove(self)
                         if result == capt then
                             break
                         end
@@ -179,15 +178,13 @@ local function new (class, obj)
     setmetatable(obj, {
         __call  = function (...) return eval(...) end,
         __index = function (t, k)
-                      local parents = getmetatable(t)._PARENTS
-                      for i = 1, #parents do
-                          local v = parents[i][k]
+                      for i = #t, 1, -1 do
+                          local v = t[i][k]
                           if v ~= nil then
                               return v
                           end
                       end
                   end,
-        _PARENTS = {},
     })
     return obj
 end
