@@ -148,16 +148,12 @@ local function eval (self, name)
         end -- interpolate_line
 
         if template:find "\n" then
-            local f = io.tmpfile()
-            f:write(template)
-            f:seek 'set'
             local results = {}
-            for line in f:lines() do
+            for line in template:gmatch "([^\n]*)\n" do
                 table.insert(results, interpolate_line(line))
                 lineno = lineno + 1
             end
             table.insert(results, '')
-            f:close()
             return table.concat(results, "\n")
         else
             return interpolate_line(template)
