@@ -7,7 +7,6 @@ local getmetatable = getmetatable
 local setmetatable = setmetatable
 local tostring = tostring
 local type = type
-local io = require 'io'
 local table = require 'table'
 
 module 'CodeGen'
