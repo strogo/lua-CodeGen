@@ -134,7 +134,7 @@ local function eval (self, name)
                 return capt
             end  -- get_repl
 
-            local indent = line:match "^(%s+)%$%b{}$"
+            local indent = line:match "^(%s*)%$%b{}$"
             local result = line:gsub("(%$%b{})", get_repl)
             if indent then
                 local len = result:len()

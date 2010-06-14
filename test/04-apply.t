@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(7)
+plan(8)
 
 tmpl = CodeGen{
     outer = [[
@@ -66,11 +66,11 @@ is( msg, "outer:2: data is not a table" )
 tmpl = CodeGen{
     outer = [[
 begin
-  ${data:inner()}
+${data:inner()}
 end
 ]],
     inner = [[
-  print(${it});
+    print(${it});
 ]],
 }
 tmpl.data = { 1, 2, 3 }
@@ -79,6 +79,13 @@ begin
     print(1);
     print(2);
     print(3);
+end
+]] , "it" )
+
+tmpl.data = {}
+is( tmpl 'outer', [[
+begin
+
 end
 ]] , "it" )
 
