@@ -10,7 +10,7 @@ description = {
     detailed = [[
         lua-CodeGen is a "safe" template engine.
     ]],
-    homepage = 'http://lua-codegen.luaforge.net/',
+    homepage = 'http://fperrad.github.com/lua-CodeGen',
     maintainer = 'Francois Perrad',
     license = 'MIT/X11'
 }

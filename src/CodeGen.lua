@@ -1,6 +1,6 @@
 
 --
--- lua-CodeGen : <http://lua-codegen.luaforge.net/>
+-- lua-CodeGen : <http://fperrad.github.com/lua-CodeGen>
 --
 
 local getmetatable = getmetatable
