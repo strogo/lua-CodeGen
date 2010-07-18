@@ -24,6 +24,7 @@ my @files = qw{MANIFEST}; \
 while (<>) { \
     chomp; \
     next if m{^\.}; \
+    next if m{^doc/google}; \
     next if m{^rockspec/}; \
     push @files, $$_; \
 } \
@@ -56,7 +57,10 @@ CHANGES:
 tag:
 	git tag -a -m 'tag release $(VERSION)' $(VERSION)
 
-MANIFEST:
+doc:
+	git read-tree --prefix=doc/ -u remotes/origin/gh-pages
+
+MANIFEST: doc
 	git ls-files | perl -e '$(manifest_pl)' > MANIFEST
 
 $(TARBALL): MANIFEST
@@ -64,6 +68,8 @@ $(TARBALL): MANIFEST
 	perl -ne 'print qq{lua-CodeGen-$(VERSION)/$$_};' MANIFEST | \
 	    tar -zc -T - -f $(TARBALL)
 	rm lua-CodeGen-$(VERSION)
+	rm -rf doc
+	git rm doc/*
 
 dist: $(TARBALL)
 
@@ -85,11 +91,9 @@ coverage:
 	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t
 	cd src && luacov
 
-html:
-	xmllint --noout --valid doc/*.html
-
 clean:
-	rm -f MANIFEST *.bak *.rockspec
+	rm -rf doc
+	rm -f MANIFEST *.bak src/luacov.*.out *.rockspec
 
 .PHONY: test rockspec CHANGES
 
