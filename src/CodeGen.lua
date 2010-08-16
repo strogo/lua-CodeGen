@@ -41,7 +41,8 @@ local function eval (self, name)
 
         local function add_message (...)
             local msg = table.concat({...})
-            table.insert(getmetatable(self)._MSG, tname .. ':' .. lineno .. ': ' .. msg)
+            local t = getmetatable(self)._MSG;
+            t[#t+1] = tname .. ':' .. lineno .. ': ' .. msg
         end  -- add_message
 
         local function get_value (vname)
@@ -96,10 +97,10 @@ local function eval (self, name)
                         if type(elt) ~= 'table' then
                             elt = { it = elt }
                         end
-                        table.insert(self, elt)
+                        self[#self+1] = elt -- push
                         local result = apply(capt2)
-                        table.insert(results, result)
-                        table.remove(self)
+                        results[#results+1] = result
+                        self[#self] = nil -- pop
                         if result == capt then
                             break
                         end
@@ -149,10 +150,10 @@ local function eval (self, name)
         if template:find "\n" then
             local results = {}
             for line in template:gmatch "([^\n]*)\n" do
-                table.insert(results, interpolate_line(line))
+                results[#results+1] = interpolate_line(line)
                 lineno = lineno + 1
             end
-            table.insert(results, '')
+            results[#results+1] = ''
             return table.concat(results, "\n")
         else
             return interpolate_line(template)
