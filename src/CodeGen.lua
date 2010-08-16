@@ -7,7 +7,7 @@ local getmetatable = getmetatable
 local setmetatable = setmetatable
 local tostring = tostring
 local type = type
-local table = require 'table'
+local tconcat = require 'table'.concat
 
 module 'CodeGen'
 
@@ -16,7 +16,7 @@ local function render (val, sep)
         return ''
     end
     if type(val) == 'table' then
-        return table.concat(val, sep)
+        return tconcat(val, sep)
     end
     return tostring(val)
 end
@@ -29,7 +29,7 @@ local function eval (self, name)
     local function get_messages ()
         local t = getmetatable(self)._MSG
         if #t > 0 then
-            return table.concat(t, "\n")
+            return tconcat(t, "\n")
         end
     end  -- get_messages
 
@@ -40,7 +40,7 @@ local function eval (self, name)
         local lineno = 1
 
         local function add_message (...)
-            local msg = table.concat({...})
+            local msg = tconcat({...})
             local t = getmetatable(self)._MSG;
             t[#t+1] = tname .. ':' .. lineno .. ': ' .. msg
         end  -- add_message
@@ -105,7 +105,7 @@ local function eval (self, name)
                             break
                         end
                     end
-                    return table.concat(results)
+                    return tconcat(results)
                 end
                 local capt2 = capt:match("^?([%a_][%w_]*)%(%)}", pos)
                 if capt2 then
@@ -154,7 +154,7 @@ local function eval (self, name)
                 lineno = lineno + 1
             end
             results[#results+1] = ''
-            return table.concat(results, "\n")
+            return tconcat(results, "\n")
         else
             return interpolate_line(template)
         end
