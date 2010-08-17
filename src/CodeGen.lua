@@ -11,14 +11,19 @@ local tconcat = require 'table'.concat
 
 module 'CodeGen'
 
-local function render (val, sep)
+local function render (val, sep, formatter)
+    formatter = formatter or tostring
     if val == nil then
         return ''
     end
     if type(val) == 'table' then
+        for i = 1, #val do
+            val[i] = formatter(val[i])
+        end
         return tconcat(val, sep)
+    else
+        return formatter(val)
     end
-    return tostring(val)
 end
 
 local function eval (self, name)
@@ -75,8 +80,22 @@ local function eval (self, name)
                     add_message(capt, " does not match")
                     return capt
                 end
-                if capt:match("^}", pos) then
-                    return render(get_value(capt1))
+                local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
+                if not sep then
+                      sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                end
+                local fmt, pos_fmt = capt:match("^;%s+format%s*=%s*([%a_][%w_]*)%s*()", pos_sep or pos)
+                if capt:match("^}", pos_fmt or pos_sep or pos) then
+                    if fmt then
+                        local formatter = self[fmt]
+                        if type(formatter) ~= 'function' then
+                            add_message(fmt, " is not a formatter")
+                            return capt
+                        end
+                        return render(get_value(capt1), sep, formatter)
+                    else
+                        return render(get_value(capt1), sep)
+                    end
                 end
                 if capt:match("^%(%)}", pos) then
                     return apply(capt1)
@@ -122,14 +141,6 @@ local function eval (self, name)
                     else
                         return apply(capt3)
                     end
-                end
-                local sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*}", pos)
-                if sep then
-                    return render(get_value(capt1), sep)
-                end
-                local sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*}", pos)
-                if sep then
-                    return render(get_value(capt1), sep)
                 end
                 add_message(capt, " does not match")
                 return capt
