@@ -183,6 +183,7 @@ end
 local function new (class, obj)
     obj = obj or {}
     setmetatable(obj, {
+        __tostring = function () return 'CodeGen' end,
         __call  = function (...) return eval(...) end,
         __index = function (t, k)
                       for i = #t, 1, -1 do

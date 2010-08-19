@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(7)
+plan(8)
 
 tmpl = CodeGen()
 type_ok( tmpl, 'table', "new CodeGen" )
@@ -22,3 +22,4 @@ is( tmpl 'pi', '3.14', "eval 'pi'" )
 isnt( tmpl 'pi', 3.14 )
 is( tmpl 'unk', '', "unknown gives an empty string" )
 
+is( tostring(tmpl), 'CodeGen', "__tostring" )
