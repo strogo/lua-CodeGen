@@ -3,7 +3,6 @@
 -- lua-CodeGen : <http://fperrad.github.com/lua-CodeGen>
 --
 
-local getmetatable = getmetatable
 local setmetatable = setmetatable
 local tostring = tostring
 local type = type
@@ -27,16 +26,7 @@ local function render (val, sep, formatter)
 end
 
 local function eval (self, name)
-    local function reset_messages ()
-        getmetatable(self)._MSG = {}
-    end  -- reset_messages
-
-    local function get_messages ()
-        local t = getmetatable(self)._MSG
-        if #t > 0 then
-            return tconcat(t, "\n")
-        end
-    end  -- get_messages
+    local msg = {}
 
     local function interpolate (template, tname)
         if type(template) ~= 'string' then
@@ -45,9 +35,7 @@ local function eval (self, name)
         local lineno = 1
 
         local function add_message (...)
-            local msg = tconcat({...})
-            local t = getmetatable(self)._MSG;
-            t[#t+1] = tname .. ':' .. lineno .. ': ' .. msg
+            msg[#msg+1] = tname .. ':' .. lineno .. ': ' .. tconcat{...}
         end  -- add_message
 
         local function get_value (vname)
@@ -173,8 +161,7 @@ local function eval (self, name)
 
     local val = self[name]
     if type(val) == 'string' then
-        reset_messages()
-        return interpolate(val, name), get_messages()
+        return interpolate(val, name), #msg > 0 and tconcat(msg, "\n")
     else
         return render(val)
     end
