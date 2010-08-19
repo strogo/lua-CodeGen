@@ -26,6 +26,7 @@ local function render (val, sep, formatter)
 end
 
 local function eval (self, name)
+    local cyclic = {}
     local msg = {}
 
     local function interpolate (template, tname)
@@ -55,7 +56,13 @@ local function eval (self, name)
         local function interpolate_line (line)
             local function get_repl (capt)
                 local function apply (tmpl)
+                    if cyclic[tmpl] then
+                        add_message("cyclic call of ", tmpl)
+                        return capt
+                    end
+                    cyclic[tmpl] = true
                     local result = interpolate(self[tmpl], tmpl)
+                    cyclic[tmpl] = nil
                     if result == nil then
                         add_message(tmpl, " is not a template")
                         return capt
@@ -161,7 +168,8 @@ local function eval (self, name)
 
     local val = self[name]
     if type(val) == 'string' then
-        return interpolate(val, name), #msg > 0 and tconcat(msg, "\n")
+        return interpolate(val, name),
+               (#msg > 0 and tconcat(msg, "\n")) or nil
     else
         return render(val)
     end

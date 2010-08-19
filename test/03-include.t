@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(3)
+plan(5)
 
 tmpl = CodeGen{
     outer = [[
@@ -29,3 +29,22 @@ begin
 end
 ]] , "not a template" )
 is( msg, "outer:2: inner is not a template" )
+
+tmpl = CodeGen{
+    top = [[
+${outer()}
+]],
+    outer = [[
+begin
+    ${inner()}
+end
+]],
+    inner = [[print("${outer()}");]],
+}
+res, msg = tmpl 'top'
+is( res, [[
+begin
+    print("${outer()}");
+end
+]], "cyclic call" )
+is( msg, "inner:1: cyclic call of outer" )
