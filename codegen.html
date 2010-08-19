@@ -44,6 +44,7 @@
     <li><strong>The module <code>CodeGen</code></strong>
       <ul>
         <li><a href="codegen.html#manual">Manual</a></li>
+        <li><a href="codegen.html#examples">Examples</a></li>
       </ul>
     </li>
     <li><a href="http://luaforge.net/projects/lua-codegen/">Project</a>
@@ -57,9 +58,108 @@
 
 <div id="content">
 
-<h2><a name="manual"></a>Manual</h2>
+<h1><a name="manual"></a>Manual</h1>
 
-<p><em>TODO</em></p>
+<h2>For the impatient</h2>
+
+<pre class="example">
+require 'CodeGen'
+
+tmpl = CodeGen {    -- instanciation
+    tarball = "${name}-${version}.tar.gz",
+    name = 'lua',
+}
+tmpl.version = 5.1
+output = tmpl 'tarball'     -- interpolation
+print(output) -- > lua-5.1.tar.gz
+</pre>
+
+<h2>The instanciation</h2>
+
+<p>The instanciation of a template is done by the call of <code>CodeGen</code>
+with an optional parameter. This parameter is a table. The hash part of this
+table uses only string as key and could contains 3 kinds of value :
+</p>
+<ul>
+  <li>chunk of template which is a string and could contains primitives ie. <code>${...}</code></li>
+  <li>data which gives access to the data model</li>
+  <li>formatter which is a function which accepts a string as parameter and
+      returns it after a transformation. The typical usage is for escape sequence.</li>
+</ul>
+<p>
+The array part is used for inheritance from other templates.
+</p>
+
+<h2>Setting data and other alteration</h2>
+
+<p>After the instanciation and before the interpolation, all member of the template
+are accessible and modifiable like in a table.
+</p>
+
+<p>Typically, data from the model are added after the instanciation.
+</p>
+
+<h2>The interpolation</h2>
+
+<p>The interpolation is done by calling the template with one string parameter
+which is the keyname of the entry point template.
+</p>
+
+<p>The interpolation returns a string and an array which could contains some error messages.
+</p>
+
+<h2>The 4 primitives</h2>
+
+<p>The <code>data</code> could be in the form of <code>foo.bar.baz</code>.
+</p>
+
+<h4>Attribute reference</h4>
+
+<p>The syntax is <code>${<em>data[</em>; separator=<em>'sep'][</em>; format=<em>name]</em>}</code>.
+</p>
+
+<p>An undefined <code>data</code> produces an empty string.
+</p>
+
+<p>When <code>data</code> is a table, the option <code>separator</code> is used as
+parameter of <code>table.concat(data, sep)</code>.
+</p>
+
+<p>The option <code>format</code> allows to specify a formatter function.
+The default is the standard Lua function <code>tostring</code>.
+</p>
+
+<h4>Template include</h4>
+
+<p>The syntax is <code>${<em>name</em>()}</code> where <code>name</code> is the keyname of a chunk template.
+</p>
+
+<p>If <code>name</code> is not the keyname of a valid chunk, there are no substitution
+and an error is reported.
+</p>
+
+<h4>Conditional include</h4>
+
+<p>The <code>if</code> syntax is <code>${<em>data</em>?<em>name1</em>()}</code>
+and the <code>if/else</code> syntax is <code>${<em>data</em>?<em>name1</em>():<em>name2</em>()}</code>
+where <code>name1</code> and <code>name2</code> are the keyname of a chunk template
+and <code>data</code> is evaluated as a boolean.
+</p>
+
+<h4>Template application</h4>
+
+<p>The syntax is <code>${<em>data</em>:<em>name</em>()}</code>
+where <code>data</code> must be a table.
+The template <code>name</code> is called for each item of the array <code>data</code>,
+and the result is concatened.
+</p>
+
+<h2><a name="examples"></a>Examples</h2>
+
+<pre class="example">
+TODO
+</pre>
+
 
 </div> <!-- id="content" -->
 
