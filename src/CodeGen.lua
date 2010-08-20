@@ -29,7 +29,7 @@ local function eval (self, name)
     local cyclic = {}
     local msg = {}
 
-    local function interpolate (template, tname)
+    local function interpolate (self, template, tname)
         if type(template) ~= 'string' then
             return nil
         end
@@ -55,13 +55,13 @@ local function eval (self, name)
 
         local function interpolate_line (line)
             local function get_repl (capt)
-                local function apply (tmpl)
+                local function apply (self, tmpl)
                     if cyclic[tmpl] then
                         add_message("cyclic call of ", tmpl)
                         return capt
                     end
                     cyclic[tmpl] = true
-                    local result = interpolate(self[tmpl], tmpl)
+                    local result = interpolate(self, self[tmpl], tmpl)
                     cyclic[tmpl] = nil
                     if result == nil then
                         add_message(tmpl, " is not a template")
@@ -93,7 +93,7 @@ local function eval (self, name)
                     end
                 end
                 if capt:match("^%(%)}", pos) then
-                    return apply(capt1)
+                    return apply(self, capt1)
                 end
                 local capt2 = capt:match("^:([%a_][%w_]*)%(%)}", pos)
                 if capt2 then
@@ -111,10 +111,9 @@ local function eval (self, name)
                         if type(elt) ~= 'table' then
                             elt = { it = elt }
                         end
-                        self[#self+1] = elt -- push
-                        local result = apply(capt2)
+                        elt[#elt+1] = self
+                        local result = apply(new(elt), capt2)
                         results[#results+1] = result
-                        self[#self] = nil -- pop
                         if result == capt then
                             break
                         end
@@ -124,7 +123,7 @@ local function eval (self, name)
                 local capt2 = capt:match("^?([%a_][%w_]*)%(%)}", pos)
                 if capt2 then
                     if get_value(capt1) then
-                        return apply(capt2)
+                        return apply(self, capt2)
                     else
                         return ''
                     end
@@ -132,9 +131,9 @@ local function eval (self, name)
                 local capt2, capt3 = capt:match("^?([%a_][%w_]*)%(%):([%a_][%w_]*)%(%)}", pos)
                 if capt2 and capt3 then
                     if get_value(capt1) then
-                        return apply(capt2)
+                        return apply(self, capt2)
                     else
-                        return apply(capt3)
+                        return apply(self, capt3)
                     end
                 end
                 add_message(capt, " does not match")
@@ -168,14 +167,14 @@ local function eval (self, name)
 
     local val = self[name]
     if type(val) == 'string' then
-        return interpolate(val, name),
+        return interpolate(self, val, name),
                (#msg > 0 and tconcat(msg, "\n")) or nil
     else
         return render(val)
     end
 end
 
-local function new (obj)
+function new (obj)
     obj = obj or {}
     setmetatable(obj, {
         __tostring = function () return 'CodeGen' end,
