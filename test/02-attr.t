@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(18)
+plan(19)
 
 tmpl = CodeGen{
     code = [[print("${hello}, ${_guy1; format=upper}");]],
@@ -14,7 +14,9 @@ tmpl = CodeGen{
 }
 is( tmpl 'code', [[print("Hello, YOU");]], "scalar attributes" )
 tmpl.hello = "Hi"
-is( tmpl 'code', [[print("Hi, YOU");]] )
+res, msg = tmpl 'code'
+is( res, [[print("Hi, YOU");]] )
+is( msg, nil, "no error" )
 
 tmpl = CodeGen()
 tmpl.a = { 'abc', 'def', 'hij' }
