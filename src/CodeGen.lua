@@ -175,7 +175,7 @@ local function eval (self, name)
     end
 end
 
-local function new (class, obj)
+local function new (obj)
     obj = obj or {}
     setmetatable(obj, {
         __tostring = function () return 'CodeGen' end,
@@ -193,7 +193,7 @@ local function new (class, obj)
 end
 
 setmetatable(_M, {
-    __call = function (...) return new(...) end
+    __call = function (func, ...) return new(...) end
 })
 
 _VERSION = "0.0.1"
