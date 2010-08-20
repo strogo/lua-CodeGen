@@ -71,7 +71,7 @@ tmpl = CodeGen {    -- instanciation
 }
 tmpl.version = 5.1
 output = tmpl 'tarball'     -- interpolation
-print(output) -- > lua-5.1.tar.gz
+print(output) --> lua-5.1.tar.gz
 </pre>
 
 <h2>The instanciation</h2>
@@ -89,6 +89,20 @@ table uses only string as key and could contains 3 kinds of value :
 <p>
 The array part is used for inheritance from other templates.
 </p>
+
+<p>A common pattern is to put this part in an external file.
+</p>
+
+<pre class="example">
+-- file: tarball.tmpl
+return CodeGen {
+    tarball = "${name}-${version}.tar.gz",
+}
+</pre>
+
+<pre class="example">
+tmpl = dofile 'tarball.tmpl'
+</pre>
 
 <h2>Setting data and other alteration</h2>
 
@@ -121,13 +135,25 @@ which is the keyname of the entry point template.
 <p>An undefined <code>data</code> produces an empty string.
 </p>
 
+<p>The option <code>format</code> allows to specify a formatter function.
+The default is the standard Lua function <code>tostring</code>.
+</p>
+
 <p>When <code>data</code> is a table, the option <code>separator</code> is used as
 parameter of <code>table.concat(data, sep)</code>.
 </p>
 
-<p>The option <code>format</code> allows to specify a formatter function.
-The default is the standard Lua function <code>tostring</code>.
-</p>
+<pre class="example">
+require 'CodeGen'
+
+tmpl = CodeGen {
+    call = "${name}(${parameters; separator=', '});",
+}
+tmpl.name = 'print'
+tmpl.parameters = { 1, 2, 3 }
+output = tmpl 'call'
+print(output) --> print(1, 2, 3);
+</pre>
 
 <h4>Template include</h4>
 
@@ -156,10 +182,107 @@ and the result is concatened.
 
 <h2><a name="examples"></a>Examples</h2>
 
+<p>A generic template for rockspec.</p>
+
 <pre class="example">
-TODO
+-- file: rockspec.tmpl
+return CodeGen {
+    rockspec = [[
+package = '${name}'
+version = '${version}-${revision}'
+${_source()}
+${_description()}
+${_dependencies()}
+]],
+    _source = [[
+source = {
+    url = ${_url()},
+    md5 = '${md5}',
+    dir = '${name}-${version}',
+},
+]],
+    _description = [[
+description = {
+    ${desc.summary?_summary()}
+    ${desc.homepage?_homepage()}
+    ${desc.maintainer?_maintainer()}
+    ${desc.license?_license()}
+},
+]],
+    _summary = 'summary = "${desc.summary}",',
+    _homepage = 'homepage = "${desc.homepage}",',
+    _maintainer = 'maintainer = "${desc.maintainer}",',
+    _license = 'license = "${desc.license}",',
+    _dependencies = [[
+dependencies = {
+${dependencies:_depend()}
+}
+]],
+    _depend = [[
+    '${name} >= ${version}',
+]],
+}
 </pre>
 
+<p>A specialization for all my projects.</p>
+
+<pre class="example">
+-- file: my_rockspec.tmpl
+local rs = dofile 'rockspec.tmpl'
+
+return CodeGen {
+    rs;
+    lower = string.lower,
+    _tarball = "${name; format=lower}-${version}.tar.gz",
+    _url = "'http://cloud.github.com/downloads/fperrad/${name}/${_tarball()}'",
+    _homepage = 'homepage = "http://fperrad.github.com/${name}",',
+    desc = {
+        homepage = true,
+        maintainer = "Francois Perrad",
+        license = "MIT/X11",
+    },
+}
+</pre>
+
+<p>And now for this project.</p>
+
+<pre class="example">
+require 'CodeGen'
+
+rs = dofile 'my_rockspec.tmpl'
+rs.name = 'lua-CodeGen'
+rs.version = '0.1.0'
+rs.revision = 1
+rs.md5 = 'XxX'
+rs.desc.summary = "a template engine"
+rs.dependencies = {
+    { name = 'lua', version = 5.1 },
+    { name = 'lua-testmore', version = '0.2.1' },
+}
+print(rs 'rockspec')
+</pre>
+
+<p>The output is :</p>
+
+<pre class="example">
+package = 'lua-CodeGen'
+version = '0.1.0-1'
+source = {
+    url = 'http://cloud.github.com/downloads/fperrad/lua-CodeGen/lua-codegen-0.1.0.tar.gz',
+    md5 = 'XxX',
+    dir = 'lua-CodeGen-0.1.0',
+},
+description = {
+    summary = "a template engine",
+    homepage = "http://fperrad.github.com/lua-CodeGen",
+    maintainer = "Francois Perrad",
+    license = "MIT/X11",
+},
+dependencies = {
+    'lua >= 5.1',
+    'lua-testmore >= 0.2.1',
+}
+</pre>
 
 </div> <!-- id="content" -->
 
