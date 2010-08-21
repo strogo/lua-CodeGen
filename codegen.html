@@ -8,7 +8,7 @@
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
   <meta http-equiv="Description" content="Module CodeGen"/>
-  <meta http-equiv="Keywords" content="lua, template, engine"/>
+  <meta http-equiv="Keywords" content="lua, CodeGen, template, engine, interpolation"/>
 </head>
 
 <body>
@@ -77,20 +77,21 @@ print(output) --> lua-5.1.tar.gz
 <h2>The instanciation</h2>
 
 <p>The instanciation of a template is done by the call of <code>CodeGen</code>
-with an optional parameter. This parameter is a table. The hash part of this
-table uses only string as key and could contains 3 kinds of value :
+with optional parameters. This first parameter is a table. This table uses
+only string as key and could contains 3 kinds of value :
 </p>
 <ul>
-  <li>chunk of template which is a string and could contains primitives ie. <code>${...}</code></li>
+  <li>chunk of template which is a string and could contains primitives i.e. <code>${...}</code></li>
   <li>data which gives access to the data model</li>
   <li>formatter which is a function which accepts a string as parameter and
-      returns it after a transformation. The typical usage is for escape sequence.</li>
+      returns it after a transformation.
+      The typical usage is for escape sequence.</li>
 </ul>
 <p>
-The array part is used for inheritance from other templates.
+The other parameters allow inheritance (ie. access to field) from other templates or simple tables.
 </p>
 
-<p>A common pattern is to put this part in an external file.
+<p>A common pattern is to put this step in an external file.
 </p>
 
 <pre class="example">
@@ -119,15 +120,16 @@ are accessible and modifiable like in a table.
 which is the keyname of the entry point template.
 </p>
 
-<p>The interpolation returns a string and an optional string which contains some error messages.
+<p>The interpolation returns a string as result and an optional string which
+contains some error messages.
 </p>
 
-<h2>The 4 primitives</h2>
+<h2>The 4 primitives in template</h2>
 
 <p>The <code>data</code> could be in the form of <code>foo.bar.baz</code>.
 </p>
 
-<h4>Attribute reference</h4>
+<h4>1. Attribute reference</h4>
 
 <p>The syntax is <code>${<em>data[</em>; separator=<em>'sep'][</em>; format=<em>name]</em>}</code>.
 </p>
@@ -139,8 +141,8 @@ which is the keyname of the entry point template.
 The default is the standard Lua function <code>tostring</code>.
 </p>
 
-<p>When <code>data</code> is a table, the option <code>separator</code> is used as
-parameter of <code>table.concat(data, sep)</code>.
+<p>When <code>data</code> is a table, the option <code>separator</code>
+is used as parameter of <code>table.concat(data, sep)</code>.
 </p>
 
 <pre class="example">
@@ -155,16 +157,17 @@ output = tmpl 'call'
 print(output) --> print(1, 2, 3);
 </pre>
 
-<h4>Template include</h4>
+<h4>2. Template include</h4>
 
-<p>The syntax is <code>${<em>name</em>()}</code> where <code>name</code> is the keyname of a chunk template.
+<p>The syntax is <code>${<em>name</em>()}</code> where <code>name</code>
+is the keyname of a chunk template.
 </p>
 
-<p>If <code>name</code> is not the keyname of a valid chunk, there are no substitution
-and an error is reported.
+<p>If <code>name</code> is not the keyname of a valid chunk,
+there are no substitution and an error is reported.
 </p>
 
-<h4>Conditional include</h4>
+<h4>3. Conditional include</h4>
 
 <p>The <code>if</code> syntax is <code>${<em>data</em>?<em>name1</em>()}</code>
 and the <code>if/else</code> syntax is <code>${<em>data</em>?<em>name1</em>():<em>name2</em>()}</code>
@@ -172,12 +175,16 @@ where <code>name1</code> and <code>name2</code> are the keyname of a chunk templ
 and <code>data</code> is evaluated as a boolean.
 </p>
 
-<h4>Template application</h4>
+<h4>4. Template application</h4>
 
 <p>The syntax is <code>${<em>data</em>:<em>name</em>()}</code>
 where <code>data</code> must be a table.
 The template <code>name</code> is called for each item of the array <code>data</code>,
 and the result is concatened.
+</p>
+<p>The template has a direct access in the item,
+and inherits access from the caller.
+If the item is not a table, it is accessible via the key <code>it</code>.
 </p>
 
 <h2><a name="examples"></a>Examples</h2>
@@ -228,10 +235,10 @@ ${dependencies:_depend()}
 
 <pre class="example">
 -- file: my_rockspec.tmpl
-local rs = dofile 'rockspec.tmpl'
+local parent = dofile 'rockspec.tmpl'
 
-return CodeGen {
-    rs;
+return CodeGen({
+    parent;
     lower = string.lower,
     _tarball = "${name; format=lower}-${version}.tar.gz",
     _url = "'http://cloud.github.com/downloads/fperrad/${name}/${_tarball()}'",
@@ -241,15 +248,15 @@ return CodeGen {
         maintainer = "Francois Perrad",
         license = "MIT/X11",
     },
-}
+}, parent)
 </pre>
 
-<p>And now for this project.</p>
+<p>And finally, an use for this project.</p>
 
 <pre class="example">
 require 'CodeGen'
 
-rs = dofile 'my_rockspec.tmpl'
+local rs = dofile 'my_rockspec.tmpl'
 rs.name = 'lua-CodeGen'
 rs.version = '0.1.0'
 rs.revision = 1
