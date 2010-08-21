@@ -26,16 +26,15 @@ References
 ----------
 
 the Terence Parr's papers :
-  + Enforcing Strict Model-View Separation in Template Engines
-    http://www.cs.usfca.edu/~parrt/papers/mvc.templates.pdf
-  + A Functional Language For Generating Structured Text
-    http://www.cs.usfca.edu/~parrt/papers/ST.pdf
+
++ [Enforcing Strict Model-View Separation in Template Engines](http://www.cs.usfca.edu/~parrt/papers/mvc.templates.pdf)
++ [A Functional Language For Generating Structured Text](http://www.cs.usfca.edu/~parrt/papers/ST.pdf)
 
 Links
 -----
 
-The homepage is at http://fperrad.github.com/lua-CodeGen,
-and the sources are hosted at http://github.com/fperrad/lua-CodeGen/.
+The homepage is at [github](http://fperrad.github.com/lua-CodeGen),
+and the sources are hosted at [github](http://github.com/fperrad/lua-CodeGen/).
 
 Copyright and License
 ---------------------
