@@ -8,7 +8,7 @@
   <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
   <meta http-equiv="Language" content="en"/>
   <meta http-equiv="Description" content="Homepage of lua-CodeGen"/>
-  <meta http-equiv="Keywords" content="lua, template, engine, safe"/>
+  <meta http-equiv="Keywords" content="lua, CodeGen, template, engine, safe"/>
 </head>
 
 <body>
@@ -61,6 +61,24 @@
 <h2><a name="overview"></a>Overview</h2>
 
 <p>lua-CodeGen is a "safe" template engine.</p>
+
+<p>lua-CodeGen enforces a strict Model-View separation.
+Only 4 primitives are supplied : attribute reference,
+template include, conditional include and
+template application (i.e., <em>map</em> operation).
+</p>
+
+<p>lua-CodeGen allows to split template in small chunk,
+and encourages the reuse of them by inheritance.
+</p>
+
+<p>Each chunk of template is like a rule of a grammar
+for an <em>unparser generator</em>.
+</p>
+
+<p>lua-CodeGen is not dedicated to HTML,
+it could generate any kind of textual code.
+</p>
 
 <h2><a name="references"></a>References</h2>
 
@@ -122,7 +140,8 @@ make test
 </a>
 </p>
 
-<p>This library is licensed under the terms of the MIT/X11 license, like Lua itself.</p>
+<p>This library is licensed under the terms of the MIT/X11 license,
+like Lua itself.</p>
 
 </div> <!-- id="content" -->
 
