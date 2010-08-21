@@ -9,6 +9,14 @@ description = {
     summary = "a template engine",
     detailed = [[
         lua-CodeGen is a "safe" template engine.
+
+        lua-CodeGen enforces a strict Model-View separation.
+
+        lua-CodeGen allows to split template in small chunk,
+        and encourages the reuse of them by inheritance.
+
+        lua-CodeGen is not dedicated to HTML,
+        it could generate any kind of textual code.
     ]],
     homepage = 'http://fperrad.github.com/lua-CodeGen',
     maintainer = 'Francois Perrad',
