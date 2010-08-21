@@ -107,12 +107,11 @@ local function eval (self, name)
                     end
                     local results = {}
                     for i = 1, #array do
-                        local elt = array[i]
-                        if type(elt) ~= 'table' then
-                            elt = { it = elt }
+                        local item = array[i]
+                        if type(item) ~= 'table' then
+                            item = { it = item }
                         end
-                        elt[#elt+1] = self
-                        local result = apply(new(elt), capt2)
+                        local result = apply(new(item, self), capt2)
                         results[#results+1] = result
                         if result == capt then
                             break
@@ -174,13 +173,13 @@ local function eval (self, name)
     end
 end
 
-function new (obj)
-    obj = obj or {}
+function new (env, ...)
+    local obj = { env or {}, ... }
     setmetatable(obj, {
         __tostring = function () return 'CodeGen' end,
         __call  = function (...) return eval(...) end,
         __index = function (t, k)
-                      for i = #t, 1, -1 do
+                      for i = 1, #t do
                           local v = t[i][k]
                           if v ~= nil then
                               return v
