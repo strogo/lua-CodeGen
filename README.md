@@ -8,9 +8,12 @@ Introduction
 lua-CodeGen is a "safe" template engine.
 
 lua-CodeGen enforces a strict Model-View separation.
-Only 4 primitives are supplied : attribute reference,
-template include, conditional include and
-template application (i.e., _map_ operation).
+Only 4 primitives are supplied :
+
+- attribute reference,
+- template include, 
+- conditional include 
+- and template application (i.e., _map_ operation).
 
 lua-CodeGen allows to split template in small chunk,
 and encourages the reuse of them by inheritance.
