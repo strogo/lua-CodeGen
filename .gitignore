@@ -4,5 +4,6 @@ MANIFEST
 *.tar.gz
 *.patch
 *.bak
+*.html
 
 luacov.*
