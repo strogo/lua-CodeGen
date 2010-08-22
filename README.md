@@ -36,8 +36,8 @@ the Terence Parr's papers :
 Links
 -----
 
-The homepage is at [github](http://fperrad.github.com/lua-CodeGen),
-and the sources are hosted at [github](http://github.com/fperrad/lua-CodeGen/).
+The homepage is at [http://fperrad.github.com/lua-CodeGen](http://fperrad.github.com/lua-CodeGen),
+and the sources are hosted at [http://github.com/fperrad/lua-CodeGen](http://github.com/fperrad/lua-CodeGen).
 
 Copyright and License
 ---------------------
