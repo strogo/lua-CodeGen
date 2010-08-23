@@ -18,7 +18,6 @@ end
 }
 is( tmpl 'outer', [[
 begin
-
 end
 ]] , "empty" )
 
@@ -85,7 +84,6 @@ end
 tmpl.data = {}
 is( tmpl 'outer', [[
 begin
-
 end
 ]] , "it" )
 

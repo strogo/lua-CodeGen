@@ -52,6 +52,5 @@ end
 tmpl.data.guy = nil
 is( tmpl 'outer', [[
 begin
-
 end
 ]] , "" )
