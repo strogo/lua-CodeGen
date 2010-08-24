@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(8)
+plan(9)
 
 tmpl = CodeGen{
     outer = [[
@@ -86,4 +86,19 @@ is( tmpl 'outer', [[
 begin
 end
 ]] , "it" )
+
+tmpl = CodeGen{
+    outer = [[
+begin
+    call(${data:inner(); separator=', '});
+end
+]],
+    inner = "${it}",
+}
+tmpl.data = { 1, 2, 3 }
+is( tmpl 'outer', [[
+begin
+    call(1, 2, 3);
+end
+]] , "with sep" )
 

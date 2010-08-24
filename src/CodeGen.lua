@@ -95,30 +95,6 @@ local function eval (self, name)
                 if capt:match("^%(%)}", pos) then
                     return apply(self, capt1)
                 end
-                local capt2 = capt:match("^:([%a_][%w_]*)%(%)}", pos)
-                if capt2 then
-                    local array = get_value(capt1)
-                    if array == nil then
-                        return ''
-                    end
-                    if type(array) ~= 'table' then
-                        add_message(capt1, " is not a table")
-                        return capt
-                    end
-                    local results = {}
-                    for i = 1, #array do
-                        local item = array[i]
-                        if type(item) ~= 'table' then
-                            item = { it = item }
-                        end
-                        local result = apply(new(item, self), capt2)
-                        results[#results+1] = result
-                        if result == capt then
-                            break
-                        end
-                    end
-                    return tconcat(results)
-                end
                 local capt2 = capt:match("^?([%a_][%w_]*)%(%)}", pos)
                 if capt2 then
                     if get_value(capt1) then
@@ -133,6 +109,36 @@ local function eval (self, name)
                         return apply(self, capt2)
                     else
                         return apply(self, capt3)
+                    end
+                end
+                local capt2, pos = capt:match("^:([%a_][%w_]*)%(%)()", pos)
+                if capt2 then
+                    local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
+                    if not sep then
+                          sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                    end
+                    if capt:match("^}", pos_sep or pos) then
+                        local array = get_value(capt1)
+                        if array == nil then
+                            return ''
+                        end
+                        if type(array) ~= 'table' then
+                            add_message(capt1, " is not a table")
+                            return capt
+                        end
+                        local results = {}
+                        for i = 1, #array do
+                            local item = array[i]
+                            if type(item) ~= 'table' then
+                                item = { it = item }
+                            end
+                            local result = apply(new(item, self), capt2)
+                            results[#results+1] = result
+                            if result == capt then
+                                break
+                            end
+                        end
+                        return tconcat(results, sep)
                     end
                 end
                 add_message(capt, " does not match")
