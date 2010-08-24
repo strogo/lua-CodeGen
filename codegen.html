@@ -170,17 +170,17 @@ there are no substitution and an error is reported.
 <h4>3. Conditional include</h4>
 
 <p>The <code>if</code> syntax is <code>${<em>data</em>?<em>name1</em>()}</code>
-and the <code>if/else</code> syntax is <code>${<em>data</em>?<em>name1</em>():<em>name2</em>()}</code>
+and the <code>if/else</code> syntax is <code>${<em>data</em>?<em>name1</em>()!<em>name2</em>()}</code>
 where <code>name1</code> and <code>name2</code> are the keyname of a chunk template
 and <code>data</code> is evaluated as a boolean.
 </p>
 
 <h4>4. Template application</h4>
 
-<p>The syntax is <code>${<em>data</em>:<em>name</em>()}</code>
+<p>The syntax is <code>${<em>data</em>:<em>name</em>()<em>[</em>; separator=<em>'sep']</em>}</code>
 where <code>data</code> must be a table.
 The template <code>name</code> is called for each item of the array <code>data</code>,
-and the result is concatened.
+and the result is concatened with an optional <code>separator</code>.
 </p>
 <p>The template has a direct access in the item,
 and inherits access from the caller.
