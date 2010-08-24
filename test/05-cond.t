@@ -9,7 +9,7 @@ plan(4)
 tmpl = CodeGen{
     outer = [[
 begin
-    ${data.locale?inner_fr():inner_en()}
+    ${data.locale?inner_fr()!inner_en()}
 end
 ]],
     inner_en = [[print("Hello, ${data.guy}");]],

@@ -127,7 +127,7 @@ local function eval (self, name)
                         return ''
                     end
                 end
-                local capt2, capt3 = capt:match("^?([%a_][%w_]*)%(%):([%a_][%w_]*)%(%)}", pos)
+                local capt2, capt3 = capt:match("^?([%a_][%w_]*)%(%)!([%a_][%w_]*)%(%)}", pos)
                 if capt2 and capt3 then
                     if get_value(capt1) then
                         return apply(self, capt2)
