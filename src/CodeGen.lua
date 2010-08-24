@@ -161,7 +161,7 @@ local function eval (self, name)
             local results = {}
             for line in template:gmatch "([^\n]*)\n" do
                 local result = interpolate_line(line)
-                if not result:match'^%s*$' or line:match'^%s*$' then
+                if result == line or not result:match'^%s*$' then
                     results[#results+1] = result
                 end
                 lineno = lineno + 1
