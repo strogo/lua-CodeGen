@@ -29,7 +29,8 @@ dependencies = {
 build = {
     type = 'builtin',
     modules = {
-        ['CodeGen'] = 'src/CodeGen.lua',
+        ['CodeGen']             = 'src/CodeGen.lua',
+        ['CodeGen.Graph']       = 'src/CodeGen/Graph.lua',
     },
     copy_directories = { 'doc', 'test' },
 }

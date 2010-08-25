@@ -12,10 +12,13 @@ endif
 LIBDIR  := $(DESTDIR)/share/lua/5.1
 
 install:
-	cp src/CodeGen.lua $(LIBDIR)
+	mkdir -p $(LIBDIR)/CodeGen
+	cp src/CodeGen.lua              $(LIBDIR)
+	cp src/CodeGen/Graph.lua        $(LIBDIR)/CodeGen
 
 uninstall:
 	rm -f $(LIBDIR)/CodeGen.lua
+	rm -f $(LIBDIR)/CodeGen/Graph.lua
 
 manifest_pl := \
 use strict; \
