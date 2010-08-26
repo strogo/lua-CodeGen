@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module CodeGen.Graph</title>
+    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta http-equiv="Author" content="Fran&ccedil;ois Perrad"/>
+  <meta http-equiv="Language" content="en"/>
+  <meta http-equiv="Description" content="Module CodeGen.Graph"/>
+  <meta http-equiv="Keywords" content="lua, CodeGen, template, engine, graph, call, tree"/>
+</head>
+
+<body>
+
+<div id="container">
+
+<div id="product">
+  <div id="product_logo">
+    <a href="http://www.lua.org">
+      <img alt="Lua" src="http://www.andreas-rozek.de/Lua/Lua-Logo_128x128.png"/>
+    </a>
+  </div>
+  <div id="product_name"><big><strong>lua-CodeGen</strong></big></div>
+  <div id="product_description">a template engine</div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+<h1>CodeGen.Graph</h1>
+  <ul>
+    <li><a href="index.html">Home</a>
+      <ul>
+        <li><a href="index.html#overview">Overview</a></li>
+        <li><a href="index.html#references">References</a></li>
+        <li><a href="index.html#status">Status</a></li>
+        <li><a href="index.html#download">Download</a></li>
+        <li><a href="index.html#installation">Installation</a></li>
+        <li><a href="index.html#test">Test</a></li>
+        <li><a href="index.html#license">License</a></li>
+      </ul>
+    </li>
+    <li><a href="codegen.html">module <code>CodeGen</code></a>
+      <ul>
+        <li><a href="codegen.html#manual">Manual</a></li>
+        <li><a href="codegen.html#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><strong>module <code>C.Graph</code></strong>
+      <ul>
+        <li><a href="graph.html#reference">Reference</a></li>
+        <li><a href="graph.html#examples">Examples</a></li>
+      </ul>
+    </li>
+    <li><a href="http://luaforge.net/projects/lua-codegen/">Project</a>
+      <ul>
+        <li><a href="http://github.com/fperrad/lua-CodeGen/">Git</a></li>
+        <li><script type="text/javascript" src="http://www.ohloh.net/p/483433/widgets/project_thin_badge.js"></script></li>
+      </ul>
+    </li>
+  </ul>
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h2><a name="reference"></a>Reference</h2>
+
+<h3>Functions</h3>
+
+<h4><code>CodeGen.Graph.to_dot( tmpl )</code></h4>
+
+<p>Returns a string in DOT format.</p>
+
+<h2><a name="examples"></a>Examples</h2>
+
+<pre class="example">
+$ lua -l CodeGen.Graph -e "print(CodeGen.Graph.to_dot(CodeGen.Graph.template))" > graph.dot
+$ dot -T png -o graph.png graph.dot
+</pre>
+
+<pre class="example">
+$ cat graph.dot
+digraph {
+    _node;
+    TOP;
+    _edge;
+
+    TOP -> _node;
+    TOP -> _edge;
+}
+</pre>
+
+<p><img src="graph.png" alt="graph.png"/>graph.png</p>
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+
+</body>
+</html>
