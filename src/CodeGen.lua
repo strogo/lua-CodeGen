@@ -3,6 +3,7 @@
 -- lua-CodeGen : <http://fperrad.github.com/lua-CodeGen>
 --
 
+local loadstring = loadstring
 local setmetatable = setmetatable
 local tostring = tostring
 local type = type
@@ -70,14 +71,23 @@ local function eval (self, name)
                     return result
                 end  -- apply
 
+                local function unescape(str, quote)
+                    return loadstring("return " .. quote .. str .. quote)()
+                end  -- unescape
+
                 local capt1, pos = capt:match("^%${([%a_][%w%._]*)()", 1)
                 if not capt1 then
                     add_message(capt, " does not match")
                     return capt
                 end
                 local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
-                if not sep then
-                      sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                if sep then
+                    sep = unescape(sep, "'")
+                else
+                    sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                    if sep then
+                        sep = unescape(sep, '"')
+                    end
                 end
                 local fmt, pos_fmt = capt:match("^;%s+format%s*=%s*([%a_][%w_]*)%s*()", pos_sep or pos)
                 if capt:match("^}", pos_fmt or pos_sep or pos) then
@@ -114,8 +124,13 @@ local function eval (self, name)
                 local capt2, pos = capt:match("^:([%a_][%w_]*)%(%)()", pos)
                 if capt2 then
                     local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
-                    if not sep then
-                          sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                    if sep then
+                        sep = unescape(sep, "'")
+                    else
+                        sep, pos_sep = capt:match("^;%s+separator%s*=%s*\"([^\"]+)\"%s*()", pos)
+                        if sep then
+                            sep = unescape(sep, '"')
+                        end
                     end
                     if capt:match("^}", pos_sep or pos) then
                         local array = get_value(capt1)

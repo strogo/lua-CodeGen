@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(9)
+plan(10)
 
 tmpl = CodeGen{
     outer = [[
@@ -102,3 +102,23 @@ begin
 end
 ]] , "with sep" )
 
+tmpl = CodeGen{
+    outer = [[
+begin
+    list(
+        ${data:inner(); separator=",\n"}
+    );
+end
+]],
+    inner = "${it}",
+}
+tmpl.data = { 1, 2, 3 }
+is( tmpl 'outer', [[
+begin
+    list(
+        1,
+        2,
+        3
+    );
+end
+]] , "sep with escape seq" )
