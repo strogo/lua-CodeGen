@@ -166,12 +166,16 @@ local function eval (self, name)
 
             local indent = line:match "^(%s*)%$%b{}$"
             local result = line:gsub("(%$%b{})", get_repl)
-            if indent then
-                local len = result:len()
-                if result:sub(len) == "\n" then
-                    result = result:sub(1, len -1)
-                end
+            if indent == '' then
+                result = result:gsub("\n$", '')
+            elseif indent then
                 result = result:gsub("\n", "\n" .. indent)
+                result = result:gsub("^" .. indent .. "\n", "\n")
+                repeat
+                    local nb
+                    result, nb = result:gsub("\n" .. indent .. "\n", "\n\n")
+                until nb == 0
+                result = result:gsub("\n" .. indent .. "$", '')
             end
             return result
         end -- interpolate_line
