@@ -72,7 +72,11 @@ local function eval (self, name)
                 end  -- apply
 
                 local function unescape(str, quote)
-                    return loadstring("return " .. quote .. str .. quote)()
+                    if str:match "\\" then
+                        return loadstring("return " .. quote .. str .. quote)()
+                    else
+                        return str
+                    end
                 end  -- unescape
 
                 local capt1, pos = capt:match("^%${([%a_][%w%._]*)()", 1)
