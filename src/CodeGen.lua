@@ -26,6 +26,14 @@ local function render (val, sep, formatter)
     end
 end
 
+local function unescape(str, quote)
+    if str:find "\\" then
+        return loadstring("return " .. quote .. str .. quote)()
+    else
+        return str
+    end
+end
+
 local function eval (self, name)
     local cyclic = {}
     local msg = {}
@@ -70,14 +78,6 @@ local function eval (self, name)
                     end
                     return result
                 end  -- apply
-
-                local function unescape(str, quote)
-                    if str:match "\\" then
-                        return loadstring("return " .. quote .. str .. quote)()
-                    else
-                        return str
-                    end
-                end  -- unescape
 
                 local capt1, pos = capt:match("^%${([%a_][%w%._]*)()", 1)
                 if not capt1 then
