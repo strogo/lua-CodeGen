@@ -230,7 +230,7 @@ setmetatable(_M, {
     __call = function (func, ...) return new(...) end
 })
 
-_VERSION = "0.0.1"
+_VERSION = "0.1.0"
 _DESCRIPTION = "lua-CodeGen : a template engine"
 _COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
 --
