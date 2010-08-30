@@ -3,7 +3,6 @@
 -- lua-CodeGen : <http://fperrad.github.com/lua-CodeGen>
 --
 
-local loadstring = loadstring
 local setmetatable = setmetatable
 local tostring = tostring
 local type = type
@@ -26,12 +25,21 @@ local function render (val, sep, formatter)
     end
 end
 
-local function unescape(str, quote)
-    if str:find "\\" then
-        return loadstring("return " .. quote .. str .. quote)()
-    else
-        return str
-    end
+local special = {
+    ['a']  = "\a",
+    ['b']  = "\b",
+    ['f']  = "\f",
+    ['n']  = "\n",
+    ['r']  = "\r",
+    ['t']  = "\t",
+    ['v']  = "\v",
+    ['\\'] = '\\',
+    ['"']  = '"',
+    ["'"]  = "'",
+}
+
+local function unescape(str)
+    return str:gsub([[\([abfnrtv\"'])]], special)
 end
 
 local function eval (self, name)
