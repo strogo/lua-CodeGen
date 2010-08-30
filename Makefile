@@ -27,6 +27,7 @@ my @files = qw{MANIFEST}; \
 while (<>) { \
     chomp; \
     next if m{^\.}; \
+    next if m{^doc/\.}; \
     next if m{^doc/google}; \
     next if m{^rockspec/}; \
     push @files, $$_; \
