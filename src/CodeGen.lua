@@ -4,9 +4,11 @@
 --
 
 local setmetatable = setmetatable
+local tonumber = tonumber
 local tostring = tostring
 local type = type
 local tconcat = require 'table'.concat
+local string = require 'string'
 
 module 'CodeGen'
 
@@ -39,6 +41,11 @@ local special = {
 }
 
 local function unescape(str)
+    str = str:gsub([[\(%d+)]], function (s)
+                                      local n = tonumber(s:sub(1, 3))
+                                      return string.char(n % 256) .. s:sub(4)
+                                  end
+    )
     return str:gsub([[\([abfnrtv\"'])]], special)
 end
 

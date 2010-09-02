@@ -27,11 +27,11 @@ tmpl.code = [[print(${a})]]
 is( tmpl 'code', [[print(abcdefhij)]], "array" )
 tmpl.code = [[print(${a; separator=', '})]]
 is( tmpl 'code', [[print(abc, def, hij)]], "array with sep" )
-tmpl.code = [[print(${a; separator = ", " })]]
+tmpl.code = [[print(${a; separator = "\44\32" })]]
 is( tmpl 'code', [[print(abc, def, hij)]], "array with sep" )
 tmpl.code = [[print(${a; format=upper1 })]]
 is( tmpl 'code', [[print(ABCDEFHIJ)]], "array" )
-tmpl.code = [[print(${a; separator=', '; format=upper2})]]
+tmpl.code = [[print(${a; separator='\044\032'; format=upper2})]]
 is( tmpl 'code', [[print(ABC, DEF, HIJ)]], "array with sep & format" )
 tmpl.code = [[print(${a; separator = ", " ; format = upper3 })]]
 is( tmpl 'code', [[print(ABC, DEF, HIJ)]], "array with sep & format" )
