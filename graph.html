@@ -66,6 +66,10 @@
 
 <h2><a name="reference"></a>Reference</h2>
 
+<p>This module produces the call tree between chunks of a template.</p>
+
+<p>It is useful to find orphan chunk.</p>
+
 <h3>Functions</h3>
 
 <h4><code>CodeGen.Graph.to_dot( tmpl )</code></h4>
@@ -82,6 +86,8 @@ $ dot -T png -o graph.png graph.dot
 <pre class="example">
 $ cat graph.dot
 digraph {
+    node [ shape = none ];
+
     _node;
     TOP;
     _edge;
