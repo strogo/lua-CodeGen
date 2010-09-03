@@ -13,6 +13,8 @@ module 'CodeGen.Graph'
 template = CodeGen {
     TOP = [[
 digraph {
+    node [ shape = none ];
+
     ${nodes:_node()}
 
     ${edges:_edge()}
