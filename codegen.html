@@ -149,6 +149,10 @@ The default is the standard Lua function <code>tostring</code>.
 
 <p>When <code>data</code> is a table, the option <code>separator</code>
 is used as parameter of <code>table.concat(data, sep)</code>.
+This parameter could be simple quoted or double quoted,
+and it handles escape sequence like Lua.
+The characters <code>{</code> and <code>}</code> are forbidden,
+there must be represented by a decimal escape sequence <code>\<em>ddd</em></code>.
 </p>
 
 <pre class="example">
