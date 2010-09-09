@@ -187,7 +187,7 @@ and <code>data</code> is evaluated as a boolean.
 
 <h4>4. Template application</h4>
 
-<p>The syntax is <code>${<em>data</em>:<em>name</em>()<em>[</em>; separator=<em>'sep']</em>}</code>
+<p>The syntax is <code>${<em>data</em>/<em>name</em>()<em>[</em>; separator=<em>'sep']</em>}</code>
 where <code>data</code> must be a table.
 The template <code>name</code> is called for each item of the array <code>data</code>,
 and the result is concatened with an optional <code>separator</code>.
@@ -232,7 +232,7 @@ description = {
     _license = 'license = "${desc.license}",',
     _dependencies = [[
 dependencies = {
-${dependencies:_depend()}
+${dependencies/_depend()}
 }
 ]],
     _depend = [[
