@@ -4,7 +4,7 @@ require 'CodeGen'
 
 require 'Test.More'
 
-plan(19)
+plan(21)
 
 tmpl = CodeGen{
     code = [[print("${hello}, ${_guy1; format=upper}");]],
@@ -33,8 +33,10 @@ tmpl.code = [[print(${a; format=upper1 })]]
 is( tmpl 'code', [[print(ABCDEFHIJ)]], "array" )
 tmpl.code = [[print(${a; separator='\044\032'; format=upper2})]]
 is( tmpl 'code', [[print(ABC, DEF, HIJ)]], "array with sep & format" )
+eq_array( tmpl.a, { 'abc', 'def', 'hij' }, "don't alter the original table" )
 tmpl.code = [[print(${a; separator = ", " ; format = upper3 })]]
 is( tmpl 'code', [[print(ABC, DEF, HIJ)]], "array with sep & format" )
+eq_array( tmpl.a, { 'abc', 'def', 'hij' }, "don't alter the original table" )
 
 tmpl = CodeGen{
     code = [[print("${data.hello}, ${data.people.guy}");]],
