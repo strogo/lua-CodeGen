@@ -18,10 +18,11 @@ local function render (val, sep, formatter)
         return ''
     end
     if type(val) == 'table' then
+        local t = {}
         for i = 1, #val do
-            val[i] = formatter(val[i])
+            t[i] = formatter(val[i])
         end
-        return tconcat(val, sep)
+        return tconcat(t, sep)
     else
         return formatter(val)
     end
