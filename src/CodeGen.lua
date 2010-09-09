@@ -139,7 +139,7 @@ local function eval (self, name)
                         return apply(self, capt3)
                     end
                 end
-                local capt2, pos = capt:match("^:([%a_][%w_]*)%(%)()", pos)
+                local capt2, pos = capt:match("^/([%a_][%w_]*)%(%)()", pos)
                 if capt2 then
                     local sep, pos_sep = capt:match("^;%s+separator%s*=%s*'([^']+)'%s*()", pos)
                     if not sep then

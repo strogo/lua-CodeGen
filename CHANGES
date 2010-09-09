@@ -1,9 +1,11 @@
 Revision history for lua-CodeGen
 
-0.1.1
+0.2.0
 	- separator handles decimal escape sequence
 	- graph without ellipse shape
 	- fix render : don't alter the original table
+	- modify the syntax of template application
+		(avoid confusion with the method call in plain Lua)
 
 0.1.0  Mon Aug 30 10:30:00 2010
 	First release

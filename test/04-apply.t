@@ -9,7 +9,7 @@ plan(10)
 tmpl = CodeGen{
     outer = [[
 begin
-${data:inner()}
+${data/inner()}
 end
 ]],
     inner = [[
@@ -24,7 +24,7 @@ end
 tmpl = CodeGen{
     outer = [[
 begin
-    ${data:inner()}
+    ${data/inner()}
 end
 ]],
     inner = [[
@@ -48,7 +48,7 @@ tmpl.inner = 3.14
 res, msg = tmpl 'outer'
 is( res, [[
 begin
-    ${data:inner()}
+    ${data/inner()}
 end
 ]] , "not a template" )
 is( msg, "outer:2: inner is not a template" )
@@ -57,7 +57,7 @@ tmpl.data = 3.14
 res, msg = tmpl 'outer'
 is( res, [[
 begin
-    ${data:inner()}
+    ${data/inner()}
 end
 ]] , "not a table" )
 is( msg, "outer:2: data is not a table" )
@@ -65,7 +65,7 @@ is( msg, "outer:2: data is not a table" )
 tmpl = CodeGen{
     outer = [[
 begin
-${data:inner()}
+${data/inner()}
 end
 ]],
     inner = [[
@@ -90,7 +90,7 @@ end
 tmpl = CodeGen{
     outer = [[
 begin
-    call(${data:inner(); separator=', '});
+    call(${data/inner(); separator=', '});
 end
 ]],
     inner = "${it}",
@@ -106,7 +106,7 @@ tmpl = CodeGen{
     outer = [[
 begin
     list(
-        ${data:inner(); separator=",\n"}
+        ${data/inner(); separator=",\n"}
     );
 end
 ]],

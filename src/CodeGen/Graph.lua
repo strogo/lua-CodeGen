@@ -15,9 +15,9 @@ template = CodeGen {
 digraph {
     node [ shape = none ];
 
-    ${nodes:_node()}
+    ${nodes/_node()}
 
-    ${edges:_edge()}
+    ${edges/_edge()}
 }
 ]],
     _node = [[
@@ -53,7 +53,7 @@ function to_dot (self)
                                 parse(capt2)
                                 parse(capt3)
                             else
-                                local capt2 = capt:match("^[?:]([%a_][%w_]*)%(%)", pos)
+                                local capt2 = capt:match("^[?/]([%a_][%w_]*)%(%)", pos)
                                 if capt2 then
                                     table.insert(edges, { caller = key, callee = capt2 })
                                      parse(capt2)
