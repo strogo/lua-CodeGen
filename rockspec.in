@@ -27,7 +27,7 @@ dependencies = {
     'lua-testmore >= 0.2.1',
 }
 build = {
-    type = 'builtin',
+    type = 'none',
     modules = {
         ['CodeGen']             = 'src/CodeGen.lua',
         ['CodeGen.Graph']       = 'src/CodeGen/Graph.lua',
