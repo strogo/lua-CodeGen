@@ -28,7 +28,7 @@ it could generate any kind of textual code.
 References
 ----------
 
-the Terence Parr's papers :
+the Terence Parr's articles :
 
 + [Enforcing Strict Model-View Separation in Template Engines](http://www.cs.usfca.edu/~parrt/papers/mvc.templates.pdf)
 + [A Functional Language For Generating Structured Text](http://www.cs.usfca.edu/~parrt/papers/ST.pdf)
