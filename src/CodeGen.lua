@@ -8,9 +8,11 @@ local tonumber = tonumber
 local tostring = tostring
 local type = type
 local tconcat = require 'table'.concat
+local _G = _G
 local string = require 'string'
 
-module 'CodeGen'
+_ENV = nil
+local m = {}
 
 local function render (val, sep, formatter)
     formatter = formatter or tostring
@@ -163,7 +165,7 @@ local function eval (self, name)
                             if type(item) ~= 'table' then
                                 item = { it = item }
                             end
-                            local result = apply(new(item, self), capt2)
+                            local result = apply(m.new(item, self), capt2)
                             results[#results+1] = result
                             if result == capt then
                                 break
@@ -217,7 +219,7 @@ local function eval (self, name)
     end
 end
 
-function new (env, ...)
+function m.new (env, ...)
     local obj = { env or {}, ... }
     setmetatable(obj, {
         __tostring = function () return 'CodeGen' end,
@@ -234,13 +236,15 @@ function new (env, ...)
     return obj
 end
 
-setmetatable(_M, {
-    __call = function (func, ...) return new(...) end
+setmetatable(m, {
+    __call = function (func, ...) return m.new(...) end
 })
+_G.CodeGen = m
 
-_VERSION = "0.2.0"
-_DESCRIPTION = "lua-CodeGen : a template engine"
-_COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
+m._VERSION = "0.2.0"
+m._DESCRIPTION = "lua-CodeGen : a template engine"
+m._COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
+return m
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

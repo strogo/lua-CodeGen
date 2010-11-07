@@ -1,6 +1,6 @@
 
 LUA     := lua
-VERSION := $(shell cd src && $(LUA) -e "require [[CodeGen]]; print(CodeGen._VERSION)")
+VERSION := $(shell cd src && $(LUA) -e "m = require [[CodeGen]]; print(m._VERSION)")
 TARBALL := lua-codegen-$(VERSION).tar.gz
 ifndef REV
   REV   := 1

@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
 
-require 'CodeGen'
+CodeGen = require 'CodeGen'
 
 require 'Test.More'
 
