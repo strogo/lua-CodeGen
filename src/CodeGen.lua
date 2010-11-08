@@ -52,6 +52,7 @@ local function unescape(str)
     return str:gsub([[\([abfnrtv\"'])]], special)
 end
 
+local new
 local function eval (self, name)
     local cyclic = {}
     local msg = {}
@@ -165,7 +166,7 @@ local function eval (self, name)
                             if type(item) ~= 'table' then
                                 item = { it = item }
                             end
-                            local result = apply(m.new(item, self), capt2)
+                            local result = apply(new(item, self), capt2)
                             results[#results+1] = result
                             if result == capt then
                                 break
@@ -219,7 +220,7 @@ local function eval (self, name)
     end
 end
 
-function m.new (env, ...)
+function new (env, ...)
     local obj = { env or {}, ... }
     setmetatable(obj, {
         __tostring = function () return 'CodeGen' end,
@@ -235,9 +236,10 @@ function m.new (env, ...)
     })
     return obj
 end
+m.new = new
 
 setmetatable(m, {
-    __call = function (func, ...) return m.new(...) end
+    __call = function (func, ...) return new(...) end
 })
 _G.CodeGen = m
 
