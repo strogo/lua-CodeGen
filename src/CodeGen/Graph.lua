@@ -29,8 +29,9 @@ ${name};
 ${caller} -> ${callee};
 ]],
 }
+m.template = template
 
-function m.to_dot (self)
+function m:to_dot ()
     local done = {}
     local nodes = {}
     local edges = {}
