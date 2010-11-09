@@ -69,7 +69,7 @@
 <h2>For the impatient</h2>
 
 <pre class="example">
-require 'CodeGen'
+local CodeGen = require 'CodeGen'
 
 tmpl = CodeGen {    -- instanciation
     tarball = "${name}-${version}.tar.gz",
@@ -156,7 +156,7 @@ there must be represented by a decimal escape sequence <code>\<em>ddd</em></code
 </p>
 
 <pre class="example">
-require 'CodeGen'
+local CodeGen = require 'CodeGen'
 
 tmpl = CodeGen {
     call = "${name}(${parameters; separator=', '});",
@@ -264,7 +264,7 @@ return CodeGen({
 <p>And finally, an use for this project.</p>
 
 <pre class="example">
-require 'CodeGen'
+CodeGen = require 'CodeGen'
 
 local rs = dofile 'my_rockspec.tmpl'
 rs.name = 'lua-CodeGen'

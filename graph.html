@@ -79,7 +79,7 @@
 <h2><a name="examples"></a>Examples</h2>
 
 <pre class="example">
-$ lua -l CodeGen.Graph -e "print(CodeGen.Graph.to_dot(CodeGen.Graph.template))" > graph.dot
+$ lua -e "print(require 'CodeGen.Graph'.to_dot(require 'CodeGen.Graph'.template))" > graph.dot
 $ dot -T png -o graph.png graph.dot
 </pre>
 
