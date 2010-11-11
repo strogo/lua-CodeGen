@@ -1,6 +1,6 @@
 
-lua-Code : a template engine
-============================
+lua-CodeGen : a template engine
+===============================
 
 Introduction
 ------------
@@ -11,8 +11,8 @@ lua-CodeGen enforces a strict Model-View separation.
 Only 4 primitives are supplied :
 
 - attribute reference,
-- template include, 
-- conditional include 
+- template include,
+- conditional include
 - and template application (i.e., _map_ operation).
 
 lua-CodeGen allows to split template in small chunk,
