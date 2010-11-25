@@ -1,7 +1,7 @@
 Revision history for lua-CodeGen
 
-0.2.1
-	fix compatibility with Lua 5.2.0 work5
+0.2.1  Fri Nov 26 10:30:00 2010
+	- fix compatibility with Lua 5.2.0 alpha
 
 0.2.0  Thu Sep  9 15:30:00 2010
 	- separator handles decimal escape sequence

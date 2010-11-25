@@ -24,7 +24,7 @@ description = {
 }
 dependencies = {
     'lua >= 5.1',
-    'lua-testmore >= 0.2.1',
+    'lua-testmore >= 0.2.3',
 }
 build = {
     type = 'none',

@@ -1,9 +1,8 @@
 
-MANIFEST
-*.tar
-*.tar.gz
-*.patch
-*.bak
-*.html
+/MANIFEST
+/README.html
+/*.tar
+/*.bak
+/*.tar.gz
 
 luacov.*

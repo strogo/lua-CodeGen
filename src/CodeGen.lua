@@ -243,7 +243,7 @@ setmetatable(m, {
 })
 _G.CodeGen = m
 
-m._VERSION = "0.2.0"
+m._VERSION = "0.2.1"
 m._DESCRIPTION = "lua-CodeGen : a template engine"
 m._COPYRIGHT = "Copyright (c) 2010 Francois Perrad"
 return m
