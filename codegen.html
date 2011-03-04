@@ -248,7 +248,6 @@ ${dependencies/_depend()}
 local parent = dofile 'rockspec.tmpl'
 
 return CodeGen({
-    parent;
     lower = string.lower,
     _tarball = "${name; format=lower}-${version}.tar.gz",
     _url = "'http://cloud.github.com/downloads/fperrad/${name}/${_tarball()}'",
